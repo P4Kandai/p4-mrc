@@ -1,0 +1,165 @@
+{
+    "target": "bmv2",
+    "p4info": "./build/mrc.p4.p4info.txt",
+    "bmv2_json": "./build/mrc.json",
+    "multicast_group_entries": [
+        {
+            "multicast_group_id": 1,
+            "replicas": [
+                {
+                    "egress_port": 1,
+                    "instance": 1
+                },
+                {
+                    "egress_port": 2,
+                    "instance": 1
+                }
+            ]
+        }
+    ],
+    "clone_session_entries": [
+        {
+            "clone_session_id": 100,
+            "replicas": [
+                {
+                    "egress_port": 1,
+                    "instance": 2
+                },
+                {
+                    "egress_port": 2,
+                    "instance": 2
+                }
+            ]
+        }
+    ],
+    "table_entries": [
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.1.1",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:07:00",
+                "port": 2
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.2.2",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:07:00",
+                "port": 2
+            }
+        },
+        {
+            "table": "MyIngress.phy_return",
+            "match": {
+                "hdr.ethernet.srcAddr": "08:00:00:00:05:00"
+            },
+            "action_name": "MyIngress.phy_forward",
+            "action_params": {
+                "srcAddr": "08:00:00:00:08:00",
+                "dstAddr": "08:00:00:00:05:00",
+                "port": 1
+            }
+        },
+        {
+            "table": "MyEgress.look_port",
+            "match": {
+                "standard_metadata.egress_port": [
+                    1
+                ]
+            },
+            "action_name": "MyEgress.setAddr",
+            "action_params": {
+                "srcAddr": "08:00:00:00:08:00",
+                "dstAddr": "08:00:00:00:05:00",
+                "op_port": 5
+            }
+        },
+        {
+            "table": "MyIngress.MRC_Nodeconf_search",
+            "match": {
+                "meta.my_metadata.failed_port": [
+                    1
+                ]
+            },
+            "action_name": "MyIngress.set_Conf",
+            "action_params": {
+                "conf": 1
+            }
+        },
+        {
+            "table": "MyIngress.MRC_conf",
+            "match": {
+                "meta.my_metadata.failed_port": [
+                    1
+                ]
+            },
+            "action_name": "MyIngress.set_Conf",
+            "action_params": {
+                "conf": 1
+            }
+        },
+        {
+            "table": "MyIngress.phy_return",
+            "match": {
+                "hdr.ethernet.srcAddr": "08:00:00:00:06:00"
+            },
+            "action_name": "MyIngress.phy_forward",
+            "action_params": {
+                "srcAddr": "08:00:00:00:08:00",
+                "dstAddr": "08:00:00:00:06:00",
+                "port": 2
+            }
+        },
+        {
+            "table": "MyEgress.look_port",
+            "match": {
+                "standard_metadata.egress_port": [
+                    2
+                ]
+            },
+            "action_name": "MyEgress.setAddr",
+            "action_params": {
+                "srcAddr": "08:00:00:00:08:00",
+                "dstAddr": "08:00:00:00:06:00",
+                "op_port": 5
+            }
+        },
+        {
+            "table": "MyIngress.MRC_Nodeconf_search",
+            "match": {
+                "meta.my_metadata.failed_port": [
+                    2
+                ]
+            },
+            "action_name": "MyIngress.set_Conf",
+            "action_params": {
+                "conf": 4
+            }
+        },
+        {
+            "table": "MyIngress.MRC_conf",
+            "match": {
+                "meta.my_metadata.failed_port": [
+                    2
+                ]
+            },
+            "action_name": "MyIngress.set_Conf",
+            "action_params": {
+                "conf": 4
+            }
+        }
+    ]
+}
