@@ -5,7 +5,7 @@ In MRC, multiple virtual networks named backup routing configurations for transm
 
 ## Used backup routing configurations
 <img src="./figure/bc.png" width="900px">
-
+`h1` is connected to node 4 (`s4`) and `h2` is connected to switch 7 (`s7`).
 ## Usage
 
 1. The directory with this README also contains a `mrc.p4`.
